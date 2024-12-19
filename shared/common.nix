@@ -30,9 +30,16 @@
   };
 
   environment.systemPackages = with pkgs; [
+    xclip
+
     git
     vim
-    neovim
+
+    # For hypervisors that support auto-resizing, this script forces it.
+    # I've noticed not everyone listens to the udev events so this is a hack.
+    (writeShellScriptBin "xrandr-auto" ''
+      xrandr --output Virtual-1 --auto
+    '')
   ] ++ (lib.optionals sharedVariable.isDarwin [
     pinentry_mac
   ]) ++ (lib.optionals sharedVariable.isLinux [
@@ -42,6 +49,8 @@
     # You can test if you don't need this by deleting this and seeing
     # if the clipboard sill works.
     gtkmm3
+    unzip
+    ranger
   ];
   
   fonts.packages = with pkgs; [

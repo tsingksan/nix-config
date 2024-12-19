@@ -7,6 +7,13 @@ mkdir -p "$XDG_CACHE_HOME/zsh"
 
 # Completion cache and dump configuration
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
+zstyle ':fzf-tab:*' fzf-opt \
+    '--border --preview-window=right:60%:hidden --bind=?:toggle-preview'
+zstyle ':completion:*:*:ls:*:files' command "fd --type f --hidden --exclude .git"
+zstyle ':completion:*:*:ls:*:directory' command "fd --type d --exclude .git"
+zstyle ':fzf-tab:complete:(cat|ls|cd|less|vim|nvim|rm|nano):*' fzf-preview \
+    '([ -d "$realpath" ] && tree -C "$realpath") || cat "$realpath"'
+
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
 if [ ! -f "$XDG_DATA_HOME/zinit/completions/_docker" ] && command -v docker &>/dev/null; then

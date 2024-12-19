@@ -69,6 +69,7 @@ zinit wait'1b' lucid for \
         atclone"./zplug.zsh" \
         atpull"%atclone" \
     g-plane/pnpm-shell-completion \
+        atload"zicompinit; zicdreplay" \
     zsh-users/zsh-completions \
     nix-community/nix-zsh-completions \
     ziglang/shell-completions 

@@ -20,11 +20,8 @@ enabled = true
 [init]
 defaultBranch = main
 
-[core]
-editor = nvim
-
-[oh-my-zsh]
-	git-commit-alias = 
+[url "ssh://git@gitlab.com/"]
+insteadOf = https://gitlab.com/
 
 [diff]
 tool = kitty

@@ -1,6 +1,12 @@
 { config, pkgs, sharedVariable, ... }:
 
 {
+  # nixpkgs.overlays = [
+  #   (final: prev: {
+  #     ghostty = ghostty.packages.${final.system}.default;
+  #   })
+  # ];
+
   users.users.${sharedVariable.user} = {
     isNormalUser = true;
     home = "/Users/${sharedVariable.user}";

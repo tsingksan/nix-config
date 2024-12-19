@@ -29,6 +29,9 @@
   
   virtualisation.docker.enable = true;
 
+  # See https://nixos.wiki/wiki/Visual_Studio_Code#Remote_SSH
+  programs.nix-ld.enable = true;
+  
   # Select internationalisation properties.
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -47,10 +50,10 @@
     enable = true;
     dpi = 220;
 
-    # desktopManager = {
-    #   xterm.enable = true;
-    #   wallpaper.mode = "fill";
-    # };
+    desktopManager = {
+      xterm.enable = true;
+      wallpaper.mode = "fill";
+    };
 
     displayManager = {
       defaultSession = "none+i3";

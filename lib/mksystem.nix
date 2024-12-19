@@ -32,7 +32,9 @@ rec {
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
-        users.${user} = import userHMConfig { inherit sharedVariable; };
+        users.${user} = import userHMConfig { 
+          inherit sharedVariable;
+        };
       };
     }
 

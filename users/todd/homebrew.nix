@@ -35,6 +35,7 @@
       "spotify"
       "vmware-fusion"
       "docker"
+      "ghostty"
     ];
   };
 

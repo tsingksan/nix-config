@@ -6,6 +6,8 @@ let
   dotfiles = builtins.path {
     path = ../../dotfiles;
   };
+
+  pnpm-shim = pkgs.callPackage ./pnpm-shim.nix { pkgs = pkgs; nodejs = pkgs.nodejs; };
 in
 
 {
@@ -18,6 +20,11 @@ in
     stateVersion = "24.11";
 
     packages = with pkgs; [
+      tree
+      eza
+      fd
+      bat
+      
       tmux
       fastfetch
       htop
@@ -33,7 +40,9 @@ in
       nodejs
       mihomo
     ] ++ (if sharedVariable.isDarwin then [
-    ] else []);
+    ] else [
+      pnpm-shim
+    ]);
   };
 
   home.sessionVariables = {
@@ -61,6 +70,8 @@ in
       rev = "main";
       sha256 = "sha256-SVpep7lVX0isYsUtscvgA7Ga3YXt/2jwQQCYkYadjiM=";
     };
+    "nvim".recursive = true;
+
     "tmux/tmux.conf".source = "${dotfiles}/.config/tmux/tmux.conf";
     "vim/viminfo".source = "${dotfiles}/.config/vim/viminfo";
     "vim/vimec".source = "${dotfiles}/.config/vim/vimec";
@@ -69,7 +80,7 @@ in
     "starship.toml".source = "${dotfiles}/.config/starship.toml";
 
   } // (if sharedVariable.isLinux then {
-    "i3/config".text = builtins.readFile ./i3;
+    "i3/config".source = "${dotfiles}/.config/i3/config";
   } else {});
 
   # https://discourse.nixos.org/t/home-manager-xdg-xxx-env-vars-are-not-getting-created/49320/12
@@ -82,6 +93,37 @@ in
   ] ++ (if sharedVariable.isDarwin then [
   ] else []);
 
+  # home.activation = lib.mkIf sharedVariable.isLinux {
+  #   reloadXResources = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #     xrdb -load ${config.xdg.configHome}/X11/xresources
+  #   '';
+  # };
+
+  programs.i3status = {
+    enable = sharedVariable.isLinux;
+
+    general = {
+      colors = true;
+      color_good = "#8C9440";
+      color_bad = "#A54242";
+      color_degraded = "#DE935F";
+    };
+
+    modules = {
+      ipv6.enable = false;
+      "wireless _first_".enable = false;
+      "battery all".enable = false;
+    };
+  };
+
+  # https://www.reddit.com/r/NixOS/comments/11x31nu/installing_nvchad_on_nix/
+  programs.neovim = {
+    enable = true;
+  };
+  
+  xresources.path = "${config.xdg.configHome}/X11/xresources";
+  xresources.extraConfig = builtins.readFile "${dotfiles}/.config/X11/xresources";
+  
   # set to true, the programs.gpg.package option will default to downloading pkgs.gnupg.
   programs.gpg.enable = true;
 

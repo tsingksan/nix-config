@@ -15,10 +15,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # dotfiles = {
-    #   url = "github:tsingksan/dotfiles";
-    #   flake = false;
-    # };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-darwin, ... }:
