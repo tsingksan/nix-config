@@ -69,7 +69,7 @@ in
     "starship.toml".source = "${dotfiles}/.config/starship.toml";
 
   } // (if sharedVariable.isLinux then {
-    "i3/config".text = builtins.readFile ./i3;
+    "i3/config".source = "${dotfiles}/.config/i3/config";
   } else {});
 
   # https://discourse.nixos.org/t/home-manager-xdg-xxx-env-vars-are-not-getting-created/49320/12
@@ -82,8 +82,27 @@ in
   ] ++ (if sharedVariable.isDarwin then [
   ] else []);
 
+  programs.i3status = {
+    enable = sharedVariable.isLinux;
+
+    general = {
+      colors = true;
+      color_good = "#8C9440";
+      color_bad = "#A54242";
+      color_degraded = "#DE935F";
+    };
+
+    modules = {
+      ipv6.enable = false;
+      "wireless _first_".enable = false;
+      "battery all".enable = false;
+    };
+  };
   # set to true, the programs.gpg.package option will default to downloading pkgs.gnupg.
   programs.gpg.enable = true;
+
+  xresources.path = "${config.xdg.configHome}/X11/xresources";
+  xresources.extraConfig = builtins.readFile "${dotfiles}/.config/X11/xresources";
 
   services.gpg-agent = {
     enable = true;
